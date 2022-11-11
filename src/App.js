@@ -1,26 +1,25 @@
 import React from 'react';
-import {Navigate, NavLink, Route, Routes, useParams} from 'react-router-dom';
+import {Link, Redirect, Route, Switch, useParams} from 'react-router-dom';
 
 const usersIds = [1, 2, 3, 5, 20];
 
 function App() {
 	return (
 		<div>
-			<Routes>
-				<Route index element={<HomePage />} />
+			<Switch>
+				<Route path="/" exact component={HomePage} />
 
-				<Route path="users">
-					<Route index element={<UsersListPage />} />
+				<Route path="/users" exact component={UsersListPage} />
+				<Route path="/users/:userId?" exact component={UserPage} />
+				<Route
+					path="/users/:userId/edit"
+					exact
+					component={UserEditPage}
+				/>
+				{/* <Redirect to={'/users'} /> */}
 
-					<Route path=":userId" >
-						<Route index element={<UserPage />} />
-						<Route path="edit" element={<UserEditPage />} />
-						<Route path="*"	element={<Navigate to={''} />} />
-					</Route>
-				</Route>
-
-				<Route path="*" element={<Navigate to={'/'} />} />
-			</Routes>
+				<Redirect from="*" to={'/'} />
+			</Switch>
 		</div>
 	);
 }
@@ -31,7 +30,7 @@ const HomePage = () => {
 	return (
 		<>
 			<h1>Home Page</h1>
-			<NavLink to={'/users'}>Users List</NavLink>
+			<Link to={'/users'}>Users List</Link>
 		</>
 	);
 };
@@ -41,14 +40,14 @@ const UsersListPage = () => {
 		<>
 			<h1>UsersList Page</h1>
 
-			<NavLink to={'/'}>Home</NavLink>
+			<Link to={'/'}>Home</Link>
 			<hr />
 			{usersIds.map((id) => {
 				return (
-					<ul key={'ul'+id}>
-						<NavLink key={id} to={`/users/${id}`}>
+					<ul key={'ul' + id}>
+						<Link key={id} to={`/users/${id}`}>
 							User Page {id}
-						</NavLink>
+						</Link>
 					</ul>
 				);
 			})}
@@ -57,39 +56,35 @@ const UsersListPage = () => {
 };
 
 const UserPage = () => {
-	const {userId} = useParams()
+	const {userId} = useParams();
 	return (
 		<>
 			<h1>User Page</h1>
-			<NavLink to={`/users/${userId}/edit`}>Edit user {userId}</NavLink>
-			{' '}
-			<NavLink to={`/users`}>Users list</NavLink>
+			<Link to={`/users/${userId}/edit`}>Edit user {userId}</Link>{' '}
+			<Link to={`/users`}>Users list</Link>
 		</>
 	);
 };
 
 const UserEditPage = () => {
-	const {userId} = useParams()
-	const filteredUsersIds = usersIds.filter((id)=>String(id) !== userId)
-	
+	const {userId} = useParams();
+	const filteredUsersIds = usersIds.filter((id) => String(id) !== userId);
+
 	return (
 		<>
 			<h1>User Info Page</h1>
-			<NavLink to={`/users/${userId}`}>Back to user {userId}</NavLink>
-			{' '}
-			<NavLink to={`/users`}>Users list</NavLink>
-			<hr/>
+			<Link to={`/users/${userId}`}>Back to user {userId}</Link>{' '}
+			<Link to={`/users`}>Users list</Link>
+			<hr />
 			{filteredUsersIds.map((id) => {
 				return (
-					<ul key={'ul'+id}>
-						<NavLink key={id} to={`/users/${id}`}>
+					<ul key={'ul' + id}>
+						<Link key={id} to={`/users/${id}`}>
 							User Page {id}
-						</NavLink>
+						</Link>
 					</ul>
 				);
 			})}
-
 		</>
 	);
 };
-
