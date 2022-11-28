@@ -13,9 +13,10 @@ function App() {
 					<Route index element={<UsersListPage />} />
 
 					<Route path=":userId" >
-						<Route index element={<UserPage />} />
+						<Route path="profile" element={<UserInfoPage />} />
 						<Route path="edit" element={<UserEditPage />} />
-						<Route path="*"	element={<Navigate to={''} />} />
+						<Route index element={<Navigate to={'./profile'} />} />
+						<Route path="*" element={<Navigate to='../profile' />} /> 
 					</Route>
 				</Route>
 
@@ -46,7 +47,7 @@ const UsersListPage = () => {
 			{usersIds.map((id) => {
 				return (
 					<ul key={'ul'+id}>
-						<NavLink key={id} to={`/users/${id}`}>
+						<NavLink key={id} to={`/users/${id}/profile`}>
 							User Page {id}
 						</NavLink>
 					</ul>
@@ -56,7 +57,7 @@ const UsersListPage = () => {
 	);
 };
 
-const UserPage = () => {
+const UserInfoPage = () => {
 	const {userId} = useParams()
 	return (
 		<>
@@ -74,7 +75,7 @@ const UserEditPage = () => {
 	
 	return (
 		<>
-			<h1>User Info Page</h1>
+			<h1>User Edit Page</h1>
 			<NavLink to={`/users/${userId}`}>Back to user {userId}</NavLink>
 			{' '}
 			<NavLink to={`/users`}>Users list</NavLink>
@@ -82,7 +83,7 @@ const UserEditPage = () => {
 			{filteredUsersIds.map((id) => {
 				return (
 					<ul key={'ul'+id}>
-						<NavLink key={id} to={`/users/${id}`}>
+						<NavLink key={id} to={`/users/${id}/profile`}>
 							User Page {id}
 						</NavLink>
 					</ul>
